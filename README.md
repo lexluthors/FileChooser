@@ -26,7 +26,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.supertaohaili:FileChooser:1.0.9'
+    implementation 'com.apecoder:filechooser:0.0.1'
 }
 ```
 
