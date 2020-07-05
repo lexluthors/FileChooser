@@ -83,7 +83,7 @@ public class FileChooserActivity extends AppCompatActivity {
 
         adapter = new FileAdapter(this, (ArrayList<FileInfo>) tourController.getCurrenFileInfoList(), R.layout.item_file, chooseType);
         fileRv = (RecyclerView) findViewById(R.id.fileRv);
-        fileRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        fileRv.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         fileRv.setAdapter(adapter);
 
         final RecyclerView currentPath = (RecyclerView) findViewById(R.id.currentPath);

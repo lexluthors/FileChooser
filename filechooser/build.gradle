@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
+
 
 android {
     compileSdkVersion 28
@@ -8,10 +10,25 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    lintOptions {
+        abortOnError false
+    }
+
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
+}
+
+publish {
+    repoName = 'maven'  // 此字段为你的仓库名称，默认为"maven"，上传的时候记得检查，否则上传会报错
+    userOrg = 'lexluthors'  // bintray用户名
+    groupId = 'com.apecoder'  // 模块目录
+    artifactId = 'filechooser'  // 此字段为你的模块名称，唯一标识符
+    publishVersion = '0.0.1'  // 版本号
+    desc = 'FileChooser androidX version'
+    website = 'https://github.com/supertaohaili/FileChooser'
 }

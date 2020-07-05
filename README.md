@@ -1,4 +1,7 @@
 # FileChooser介绍
+该项目是fork https://github.com/supertaohaili/FileChooser 对Androidx的支持
+对于使用support库的直接访问上面的库地址
+使用: implementation 'com.apecoder:filechooser:0.0.1'
 
 选择文件路径的的插件，一般运用于设置缓存路径、选择文件等地方，代码简单，几个类，库没有导入其他的第三方包，干净整洁。
 
