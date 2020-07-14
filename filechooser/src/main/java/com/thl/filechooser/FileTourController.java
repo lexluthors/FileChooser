@@ -8,10 +8,16 @@ import java.io.File;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class FileTourController {
 
@@ -192,6 +198,9 @@ public class FileTourController {
     public List<FileInfo> searchFile(File file) {
         this.currentFile = file;
         List<FileInfo> fileInfoList = new ArrayList<>();
+
+
+
         File childFiles[] = file.listFiles();
         if (childFiles != null)
             for (int i = 0; i < childFiles.length; i++) {
@@ -272,7 +281,81 @@ public class FileTourController {
                         fileInfoList.add(fileInfo);
                 }
             }
-        return fileInfoList;
+
+
+        Comparator<Object> com= Collator.getInstance(java.util.Locale.CHINA);
+        String[] newArray={"北京","阿里","淘宝","百度"};
+        Arrays.sort(newArray,com);
+        // 如果是集合 则改为下面一行代码即可
+        // Collections.sort(newArray,com);
+        for(String i:newArray){
+            System.out.print(i+"  ");
+        }
+
+
+        return listToSortByName(fileInfoList);
+    }
+
+
+
+    /**
+     * 排序后的对象集合
+     * @param list
+     * @return
+     */
+    public List<FileInfo> listToSortByName(List<FileInfo> list){
+        if(list==null || list.size()==0){
+            return list;
+        }
+        List<FileInfo> fileList = new ArrayList<>();
+        List<FileInfo> folderList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if(list.get(i).isFolder()){
+                folderList.add(list.get(i));
+            }else{
+                fileList.add(list.get(i));
+            }
+        }
+
+        Map<String, FileInfo> map = new HashMap<String, FileInfo>();
+        String[] names = new String[folderList.size()];
+        for(int i=0;i<folderList.size();i++){
+            String name = folderList.get(i).getFileName();
+            names[i] = name;
+            map.put(name, folderList.get(i));
+        }
+
+        Comparator<Object> comparator = Collator.getInstance(Locale.ENGLISH);//中文改成：CHINA
+        Arrays.sort(names, comparator);
+
+
+        Map<String, FileInfo> map2 = new HashMap<String, FileInfo>();
+        String[] names2 = new String[fileList.size()];
+        for(int i=0;i<fileList.size();i++){
+            String name = fileList.get(i).getFileName();
+            names2[i] = name;
+            map2.put(name, fileList.get(i));
+        }
+
+        Comparator<Object> comparator2 = Collator.getInstance(Locale.ENGLISH);//中文改成：CHINA
+        Arrays.sort(names2, comparator2);
+
+        folderList.clear();
+        for(String name : names){
+            if(map.containsKey(name)) {
+                folderList.add(map.get(name));
+            }
+        }
+        fileList.clear();
+        for(String name : names2){
+            if(map2.containsKey(name)) {
+                fileList.add(map2.get(name));
+            }
+        }
+        list.clear();
+        list.addAll(folderList);
+        list.addAll(fileList);
+        return list;
     }
 
     public List<FileInfo> backToParent() {
