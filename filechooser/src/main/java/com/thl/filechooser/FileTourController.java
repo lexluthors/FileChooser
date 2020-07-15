@@ -2,7 +2,6 @@ package com.thl.filechooser;
 
 import android.content.Context;
 import android.os.storage.StorageManager;
-import android.util.Log;
 
 import java.io.File;
 import java.lang.reflect.Array;
@@ -281,18 +280,6 @@ public class FileTourController {
                         fileInfoList.add(fileInfo);
                 }
             }
-
-
-        Comparator<Object> com= Collator.getInstance(java.util.Locale.CHINA);
-        String[] newArray={"北京","阿里","淘宝","百度"};
-        Arrays.sort(newArray,com);
-        // 如果是集合 则改为下面一行代码即可
-        // Collections.sort(newArray,com);
-        for(String i:newArray){
-            System.out.print(i+"  ");
-        }
-
-
         return listToSortByName(fileInfoList);
     }
 
