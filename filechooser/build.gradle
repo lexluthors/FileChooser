@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 3
-        versionName "3.0"
+        versionCode 5
+        versionName "5.0"
     }
 
     lintOptions {
@@ -28,7 +28,7 @@ publish {
     userOrg = 'lexluthors'  // bintray用户名
     groupId = 'com.apecoder'  // 模块目录
     artifactId = 'filechooser'  // 此字段为你的模块名称，唯一标识符
-    publishVersion = '0.0.3'  // 版本号
+    publishVersion = '0.0.5'  // 版本号
     desc = 'FileChooser androidX version'
     website = 'https://github.com/supertaohaili/FileChooser'
 }

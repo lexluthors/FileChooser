@@ -32,7 +32,9 @@ public class FileTourController {
 
     private Context mContext;
 
-    public FileTourController(Context context, String currentPath) {
+    public FileTourController(Context context, String currentPath, boolean showHideFile, boolean showFile) {
+        this.showHideFile = showHideFile;
+        this.showFile = showFile;
         this.currentFile = new File(currentPath);
         this.mContext = context;
         rootFile = getRootFile();

@@ -3,14 +3,15 @@ package com.thl.demo;
 
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.thl.filechooser.FileChooser;
 import com.thl.filechooser.FileInfo;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
                                 ((TextView) findViewById(R.id.tv_msg)).setText(filePath);
                             }
                         });
+                        fileChooser.setShowHideFile(true);
+                        fileChooser.showFile(false);
                         fileChooser.open();
                     }
 

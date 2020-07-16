@@ -1,11 +1,6 @@
 package com.thl.filechooser;
 
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.appcompat.widget.ListPopupWindow;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -16,6 +11,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ListPopupWindow;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class FileChooserActivity extends AppCompatActivity {
 
@@ -65,7 +65,7 @@ public class FileChooserActivity extends AppCompatActivity {
         String chooseType = getIntent().getStringExtra("chooseType");
         int themeColorRes = getIntent().getIntExtra("themeColorRes", -1);
 
-        tourController = new FileTourController(this, mChoosenFilePath);
+        tourController = new FileTourController(this, mChoosenFilePath,showHideFile,showFile);
         tourController.setShowFile(this.showFile);
         tourController.setShowHideFile(this.showHideFile);
         ImageView back = (ImageView) findViewById(R.id.back);
@@ -94,7 +94,7 @@ public class FileChooserActivity extends AppCompatActivity {
         firstItemPositionMap = new HashMap<>();
         lastItemPositionMap = new HashMap<>();
 
-        fileRv.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        fileRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
