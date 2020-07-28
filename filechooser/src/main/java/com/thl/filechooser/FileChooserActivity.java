@@ -35,6 +35,7 @@ public class FileChooserActivity extends AppCompatActivity {
     private HashMap<Integer, Integer> firstItemPositionMap;
     private HashMap<Integer, Integer> lastItemPositionMap;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +63,7 @@ public class FileChooserActivity extends AppCompatActivity {
         String title = getIntent().getStringExtra("title");
         String doneText = getIntent().getStringExtra("doneText");
         int backIconRes = getIntent().getIntExtra("backIconRes", -1);
+        int chooseCount = getIntent().getIntExtra("chooseCount", 1);
         String chooseType = getIntent().getStringExtra("chooseType");
         int themeColorRes = getIntent().getIntExtra("themeColorRes", -1);
 
@@ -81,7 +83,7 @@ public class FileChooserActivity extends AppCompatActivity {
             bgView.setBackgroundResource(themeColorRes);
         }
 
-        adapter = new FileAdapter(this, (ArrayList<FileInfo>) tourController.getCurrenFileInfoList(), R.layout.item_file, chooseType);
+        adapter = new FileAdapter(this, (ArrayList<FileInfo>) tourController.getCurrenFileInfoList(), R.layout.item_file, chooseType,chooseCount);
         fileRv = (RecyclerView) findViewById(R.id.fileRv);
         fileRv.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         fileRv.setAdapter(adapter);
@@ -183,7 +185,7 @@ public class FileChooserActivity extends AppCompatActivity {
     }
 
     public void clickRightText() {
-        if (adapter != null && adapter.getSign() < 0) {
+        if (adapter != null && adapter.getSign() <= 0) {
             Toast.makeText(this, "请选择文件路径", Toast.LENGTH_SHORT).show();
             return;
         }

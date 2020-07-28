@@ -6,6 +6,7 @@ package com.thl.filechooser;
 
 public class FileInfo {
     public static final String FILE_TYPE_FOLDER="type_folder";
+    public static final String FILE_TYPE_NOT_FOLDER="type_not_folder";
     public static final String FILE_TYPE_VIDEO="type_video";
     public static final String FILE_TYPE_AUDIO="type_audio";
     public static final String FILE_TYPE_FILE="type_file";
@@ -24,9 +25,18 @@ public class FileInfo {
 
     private String fileType = FILE_TYPE_FOLDER;
     private boolean isFolder;
+    private boolean isCheck;
     private String fileName;
     private String filePath;
     private String createTime;
+
+    public boolean isCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
+    }
 
     public String getCreateTime() {
         return createTime;

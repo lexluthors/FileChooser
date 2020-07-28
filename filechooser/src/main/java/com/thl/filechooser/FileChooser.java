@@ -3,6 +3,9 @@ package com.thl.filechooser;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+
+import java.util.List;
+
 import androidx.fragment.app.Fragment;
 
 
@@ -12,6 +15,7 @@ public class FileChooser {
     private FileChoosenListener fileChoosenListener;
 
     private int themeColorRes = -1;
+    private int chooseCount = 1;
     private String mChoosenFilePath = "";
     private String title = "选择文件";
     private String doneText = "完成";
@@ -36,6 +40,14 @@ public class FileChooser {
 
     public void setChooseType(String chooseType) {
         this.chooseType = chooseType;
+    }
+
+    public int getChooseCount() {
+        return chooseCount;
+    }
+
+    public void setChooseCount(int chooseCount) {
+        this.chooseCount = chooseCount;
     }
 
     public boolean isFileShow() {
@@ -88,10 +100,11 @@ public class FileChooser {
         intent.putExtra("backIconRes", this.backIconRes);
         intent.putExtra("chooseType", this.chooseType);
         intent.putExtra("showFile", this.showFile);
+        intent.putExtra("chooseCount", this.chooseCount);
         this.mContext.startActivity(intent);
     }
 
-    protected void finish(String filePath) {
+    protected void finish(List<FileInfo>  filePath) {
         if (fileChoosenListener != null)
             fileChoosenListener.onFileChoosen(filePath);
     }
@@ -107,6 +120,6 @@ public class FileChooser {
     }
 
     public interface FileChoosenListener {
-        void onFileChoosen(String filePath);
+        void onFileChoosen(List<FileInfo> filePath);
     }
 }

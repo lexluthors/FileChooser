@@ -1,23 +1,32 @@
 package com.thl.filechooser;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class FileAdapter extends CommonAdapter<FileInfo> {
 
-    private int sign = -1;
+    //    private int sign = -1;
+    private int chooseCount = 1;
     private String chooseType;
+    //List<FileInfo> selectList = new ArrayList<>();
+    //选中的都放在这里
+    Map<String, FileInfo> selectMap = new HashMap<>();
 
-    public FileAdapter(Context context, ArrayList<FileInfo> dataList, int resId, String chooseType) {
+    public FileAdapter(Context context, ArrayList<FileInfo> dataList, int resId, String chooseType, int chooseCount) {
         super(context, dataList, resId);
         this.chooseType = chooseType;
+        this.chooseCount = chooseCount;
     }
 
     @Override
@@ -55,7 +64,7 @@ public class FileAdapter extends CommonAdapter<FileInfo> {
         }
 
         ImageView fileChoose = (ImageView) holder.itemView.findViewById(R.id.fileChoose);
-        if (sign == position) {
+        if (data.isCheck()) {
             fileChoose.setImageResource(R.drawable.log_choose_checkbox_on);
         } else {
             fileChoose.setImageResource(R.drawable.log_choose_checkbox_off);
@@ -64,8 +73,8 @@ public class FileAdapter extends CommonAdapter<FileInfo> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mItemClickListener!=null){
-                    mItemClickListener.onItemClick(v,position,data);
+                if (mItemClickListener != null) {
+                    mItemClickListener.onItemClick(v, position, data);
                 }
             }
         });
@@ -179,13 +188,11 @@ public class FileAdapter extends CommonAdapter<FileInfo> {
         this.mItemClickListener = mItemClickListener;
     }
 
-    public interface ItemClickListener{
-        void onItemClick(View view, int position,FileInfo data);
+    public interface ItemClickListener {
+        void onItemClick(View view, int position, FileInfo data);
     }
 
     public void notifyClick(FileInfo data, int position) {
-        Log.e("taohaili",chooseType);
-        Log.e("taohaili",data.getFileType());
         if (chooseType.equals(FileInfo.FILE_TYPE_ALL)) {
             notifyData(position);
         } else if (chooseType.equals(FileInfo.FILE_TYPE_FOLDER)) {
@@ -214,26 +221,44 @@ public class FileAdapter extends CommonAdapter<FileInfo> {
     }
 
     public int getSign() {
-        return sign;
+        return selectMap.size();
     }
 
-    public String getChooseFilePath() {
-        FileInfo fileInfo = dataList.get(sign);
-        return fileInfo.getFilePath();
+    public List<FileInfo> getChooseFilePath() {
+        return new ArrayList<>(selectMap.values());
     }
 
     public void notifyData() {
-        FileAdapter.this.sign = -1;
         notifyDataSetChanged();
     }
 
     public void notifyData(int position) {
-        if (FileAdapter.this.sign == position) {
-            FileAdapter.this.sign = -1;
+        if (dataList.get(position).isCheck()) {
+            dataList.get(position).setCheck(false);
+            selectMap.remove(dataList.get(position).getFilePath());
         } else {
-            FileAdapter.this.sign = position;
+            if (selectMap.size() >= chooseCount) {
+                Toast.makeText(context, "最多选择" + chooseCount + "个", Toast.LENGTH_LONG).show();
+                return;
+            }
+            dataList.get(position).setCheck(true);
+            selectMap.put(dataList.get(position).getFilePath(), dataList.get(position));
         }
         notifyDataSetChanged();
     }
 
+
+    @Override
+    public void setData(List<FileInfo> infoList) {
+        int size = infoList.size();
+        for (int i = 0; i < size; i++) {
+            for (String key : selectMap.keySet()) {
+                if (key.contentEquals(infoList.get(i).getFilePath())) {
+                    //相同的路径,说明已经被选中了
+                    infoList.get(i).setCheck(true);
+                }
+            }
+        }
+        super.setData(infoList);
+    }
 }
