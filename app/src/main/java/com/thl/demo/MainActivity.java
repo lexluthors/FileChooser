@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                         fileChooser.setShowHideFile(false);
                         fileChooser.showFile(true);
-                        fileChooser.setChooseType(FileInfo.FILE_TYPE_FILE);
+                        fileChooser.setChooseType(FileInfo.FILE_TYPE_GIF);
                         fileChooser.setChooseCount(9);
                         fileChooser.open();
                     }

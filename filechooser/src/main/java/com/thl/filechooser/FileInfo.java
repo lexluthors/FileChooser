@@ -16,6 +16,8 @@ public class FileInfo {
     public static final String FILE_TYPE_JPEG="type_jpeg";
     public static final String FILE_TYPE_JPG="type_jpg";
     public static final String FILE_TYPE_PNG="type_png";
+    public static final String FILE_TYPE_WEBP="type_webp";
+    public static final String FILE_TYPE_GIF="type_gif";
 
     public static final String FILE_TYPE_ALL="type_all";
     public static final String  FILE_TYPE_IMAGE="type_image";

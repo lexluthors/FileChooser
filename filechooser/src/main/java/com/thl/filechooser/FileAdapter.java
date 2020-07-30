@@ -48,6 +48,8 @@ public class FileAdapter extends CommonAdapter<FileInfo> {
             imageView.setImageResource(R.drawable.format_compress);
         } else if (FileInfo.FILE_TYPE_JPEG.equals(data.getFileType())
                 || FileInfo.FILE_TYPE_JPG.equals(data.getFileType())
+                || FileInfo.FILE_TYPE_WEBP.equals(data.getFileType())
+                || FileInfo.FILE_TYPE_GIF.equals(data.getFileType())
                 || FileInfo.FILE_TYPE_PNG.equals(data.getFileType())) {
             imageView.setImageResource(R.drawable.format_picture);
         } else if (FileInfo.FILE_TYPE_FOLDER.equals(data.getFileType())) {
@@ -79,6 +81,7 @@ public class FileAdapter extends CommonAdapter<FileInfo> {
             }
         });
 
+//        if(data.getFileType().equals(chooseType))
 
         if (chooseType.equals(FileInfo.FILE_TYPE_ALL)) {
             fileChoose.setVisibility(View.VISIBLE);
@@ -128,7 +131,10 @@ public class FileAdapter extends CommonAdapter<FileInfo> {
 
             if (FileInfo.FILE_TYPE_JPEG.equals(data.getFileType())
                     || FileInfo.FILE_TYPE_JPG.equals(data.getFileType())
+                    || FileInfo.FILE_TYPE_WEBP.equals(data.getFileType())
+                    || FileInfo.FILE_TYPE_GIF.equals(data.getFileType())
                     || FileInfo.FILE_TYPE_PNG.equals(data.getFileType())) {
+
                 fileChoose.setVisibility(View.VISIBLE);
                 fileChoose.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -208,6 +214,8 @@ public class FileAdapter extends CommonAdapter<FileInfo> {
         } else if (chooseType.equals(FileInfo.FILE_TYPE_IMAGE)) {
             if (FileInfo.FILE_TYPE_JPEG.equals(data.getFileType())
                     || FileInfo.FILE_TYPE_JPG.equals(data.getFileType())
+                    || FileInfo.FILE_TYPE_WEBP.equals(data.getFileType())
+                    || FileInfo.FILE_TYPE_GIF.equals(data.getFileType())
                     || FileInfo.FILE_TYPE_PNG.equals(data.getFileType())) {
                 notifyData(position);
             }
@@ -259,6 +267,16 @@ public class FileAdapter extends CommonAdapter<FileInfo> {
                 }
             }
         }
-        super.setData(infoList);
+//        List<FileInfo> list = new ArrayList<>();
+//        for (FileInfo fileInfo : infoList) {
+//            if (fileInfo.isFolder()){
+//                list.add(fileInfo);
+//            }else{
+//                if(chooseType.equals(fileInfo.getFileType())){
+//                    list.add(fileInfo);
+//                }
+//            }
+//        }
+        super.setData(FileTourController.chooseType(chooseType,infoList));
     }
 }

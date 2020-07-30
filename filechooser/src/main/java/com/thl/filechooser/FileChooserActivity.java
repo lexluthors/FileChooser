@@ -67,7 +67,7 @@ public class FileChooserActivity extends AppCompatActivity {
         String chooseType = getIntent().getStringExtra("chooseType");
         int themeColorRes = getIntent().getIntExtra("themeColorRes", -1);
 
-        tourController = new FileTourController(this, mChoosenFilePath,showHideFile,showFile);
+        tourController = new FileTourController(this, mChoosenFilePath,chooseType,showHideFile,showFile);
         tourController.setShowFile(this.showFile);
         tourController.setShowHideFile(this.showHideFile);
         ImageView back = (ImageView) findViewById(R.id.back);

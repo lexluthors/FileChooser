@@ -27,13 +27,15 @@ public class FileTourController {
     private boolean isRootFile = true;
     private boolean showFile = true;
     private boolean showHideFile = false;
+    private String chooseType;
     private int sdcardIndex;
 
 
     private Context mContext;
 
-    public FileTourController(Context context, String currentPath, boolean showHideFile, boolean showFile) {
+    public FileTourController(Context context, String currentPath, String chooseType, boolean showHideFile, boolean showFile) {
         this.showHideFile = showHideFile;
+        this.chooseType = chooseType;
         this.showFile = showFile;
         this.currentFile = new File(currentPath);
         this.mContext = context;
@@ -201,14 +203,13 @@ public class FileTourController {
         List<FileInfo> fileInfoList = new ArrayList<>();
 
 
-
         File childFiles[] = file.listFiles();
         if (childFiles != null)
             for (int i = 0; i < childFiles.length; i++) {
                 FileInfo fileInfo = new FileInfo();
                 File childFile = childFiles[i];
                 String name = childFile.getName();
-                if (name.length()>0&& String.valueOf(name.charAt(0)).equals(".")&&!showHideFile){
+                if (name.length() > 0 && String.valueOf(name.charAt(0)).equals(".") && !showHideFile) {
                     continue;
                 }
                 fileInfo.setFileName(name);
@@ -220,58 +221,62 @@ public class FileTourController {
                     fileInfo.setFileType(FileInfo.FILE_TYPE_FOLDER);
                 } else {
                     fileInfo.setFolder(false);
-                    if ("mp4".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "3gp".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "wmv".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "ts".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "rmvb".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "mov".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "m4v".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "mkv".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "avi".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "3gpp".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "3gpp2".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "flv".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "divx".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "f4v".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "rm".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "asf".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "ram".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "mpg".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "mpeg".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "dat".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "webm".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "qsv".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "v8".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "swf".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "m2v".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "asx".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "ra".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "ndivx".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "xvid".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "m3u8".equals(getFileTypeName(childFile.getAbsolutePath())))
+                    if ("mp4".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "3gp".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "wmv".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "ts".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "rmvb".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "mov".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "m4v".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "mkv".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "avi".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "3gpp".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "3gpp2".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "flv".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "divx".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "f4v".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "rm".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "asf".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "ram".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "mpg".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "mpeg".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "dat".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "webm".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "qsv".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "v8".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "swf".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "m2v".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "asx".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "ra".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "ndivx".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "xvid".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "m3u8".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())))
                         fileInfo.setFileType(FileInfo.FILE_TYPE_VIDEO);
-                    else if ("mp3".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "aac".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "amr".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "ogg".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "wma".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "wav".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "flac".equals(getFileTypeName(childFile.getAbsolutePath())) ||
-                            "ape".equals(getFileTypeName(childFile.getAbsolutePath())))
+                    else if ("mp3".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "aac".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "amr".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "ogg".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "wma".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "wav".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "flac".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())) ||
+                            "ape".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())))
                         fileInfo.setFileType(FileInfo.FILE_TYPE_AUDIO);
-                    else if ("apk".equals(getFileTypeName(childFile.getAbsolutePath())))
+                    else if ("apk".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())))
                         fileInfo.setFileType(FileInfo.FILE_TYPE_APK);
-                    else if ("zip".equals(getFileTypeName(childFile.getAbsolutePath())))
+                    else if ("zip".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())))
                         fileInfo.setFileType(FileInfo.FILE_TYPE_ZIP);
-                    else if ("rar".equals(getFileTypeName(childFile.getAbsolutePath())))
+                    else if ("rar".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())))
                         fileInfo.setFileType(FileInfo.FILE_TYPE_RAR);
-                    else if ("jpeg".equals(getFileTypeName(childFile.getAbsolutePath())))
+                    else if ("jpeg".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())))
                         fileInfo.setFileType(FileInfo.FILE_TYPE_JPEG);
-                    else if ("jpg".equals(getFileTypeName(childFile.getAbsolutePath())))
+                    else if ("jpg".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())))
                         fileInfo.setFileType(FileInfo.FILE_TYPE_JPG);
-                    else if ("png".equals(getFileTypeName(childFile.getAbsolutePath())))
+                    else if ("png".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())))
                         fileInfo.setFileType(FileInfo.FILE_TYPE_PNG);
+                    else if ("webp".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())))
+                        fileInfo.setFileType(FileInfo.FILE_TYPE_WEBP);
+                    else if ("gif".equalsIgnoreCase(getFileTypeName(childFile.getAbsolutePath())))
+                        fileInfo.setFileType(FileInfo.FILE_TYPE_GIF);
                     else
                         fileInfo.setFileType(FileInfo.FILE_TYPE_FILE);
                 }
@@ -282,33 +287,70 @@ public class FileTourController {
                         fileInfoList.add(fileInfo);
                 }
             }
-        return listToSortByName(fileInfoList);
+        return listToSortByName(chooseType(chooseType, fileInfoList));
     }
 
-
+    public static List<FileInfo> chooseType(String chooseType, List<FileInfo> infoList) {
+        List<FileInfo> list = new ArrayList<>();
+        for (FileInfo fileInfo : infoList) {
+            if (chooseType.equals(FileInfo.FILE_TYPE_FOLDER)) {
+                if (fileInfo.isFolder()) {
+                    list.add(fileInfo);
+                }
+            } else {
+                if (fileInfo.isFolder()) {
+                    list.add(fileInfo);
+                } else {
+                    if (chooseType.equals(FileInfo.FILE_TYPE_ALL) || chooseType.equals(FileInfo.FILE_TYPE_FILE)) {
+                        list.add(fileInfo);
+                    } else if (FileInfo.FILE_TYPE_PACKAGE.equals(chooseType)) {
+                        //把zip和rar文件加入进去
+                        if (FileInfo.FILE_TYPE_ZIP.equals(fileInfo.getFileType()) || FileInfo.FILE_TYPE_RAR.equals(fileInfo.getFileType())) {
+                            list.add(fileInfo);
+                        }
+                    }
+                    else if (FileInfo.FILE_TYPE_IMAGE.equals(chooseType)) {
+                        //把图片加进去
+                        if (FileInfo.FILE_TYPE_JPEG.equals(fileInfo.getFileType())
+                                || FileInfo.FILE_TYPE_JPG.equals(fileInfo.getFileType())
+                                || FileInfo.FILE_TYPE_WEBP.equals(fileInfo.getFileType())
+                                || FileInfo.FILE_TYPE_GIF.equals(fileInfo.getFileType())
+                                || FileInfo.FILE_TYPE_PNG.equals(fileInfo.getFileType())) {
+                            list.add(fileInfo);
+                        }
+                    }
+                    else if (chooseType.equals(fileInfo.getFileType())) {
+                        list.add(fileInfo);
+                    }
+                }
+            }
+        }
+        return list;
+    }
 
     /**
      * 排序后的对象集合
+     *
      * @param list
      * @return
      */
-    public List<FileInfo> listToSortByName(List<FileInfo> list){
-        if(list==null || list.size()==0){
+    public List<FileInfo> listToSortByName(List<FileInfo> list) {
+        if (list == null || list.size() == 0) {
             return list;
         }
         List<FileInfo> fileList = new ArrayList<>();
         List<FileInfo> folderList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            if(list.get(i).isFolder()){
+            if (list.get(i).isFolder()) {
                 folderList.add(list.get(i));
-            }else{
+            } else {
                 fileList.add(list.get(i));
             }
         }
 
         Map<String, FileInfo> map = new HashMap<String, FileInfo>();
         String[] names = new String[folderList.size()];
-        for(int i=0;i<folderList.size();i++){
+        for (int i = 0; i < folderList.size(); i++) {
             String name = folderList.get(i).getFileName();
             names[i] = name;
             map.put(name, folderList.get(i));
@@ -320,7 +362,7 @@ public class FileTourController {
 
         Map<String, FileInfo> map2 = new HashMap<String, FileInfo>();
         String[] names2 = new String[fileList.size()];
-        for(int i=0;i<fileList.size();i++){
+        for (int i = 0; i < fileList.size(); i++) {
             String name = fileList.get(i).getFileName();
             names2[i] = name;
             map2.put(name, fileList.get(i));
@@ -330,14 +372,14 @@ public class FileTourController {
         Arrays.sort(names2, comparator2);
 
         folderList.clear();
-        for(String name : names){
-            if(map.containsKey(name)) {
+        for (String name : names) {
+            if (map.containsKey(name)) {
                 folderList.add(map.get(name));
             }
         }
         fileList.clear();
-        for(String name : names2){
-            if(map2.containsKey(name)) {
+        for (String name : names2) {
+            if (map2.containsKey(name)) {
                 fileList.add(map2.get(name));
             }
         }
@@ -368,7 +410,7 @@ public class FileTourController {
 
     private String getFileTypeName(String path) {
         int start = path.lastIndexOf(".") + 1;
-        if (start == -1)
+        if (start == 0)
             return "";
         return path.substring(start);
     }
