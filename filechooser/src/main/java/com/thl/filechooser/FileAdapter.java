@@ -7,7 +7,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +21,7 @@ public class FileAdapter extends CommonAdapter<FileInfo> {
     private String chooseType;
     //List<FileInfo> selectList = new ArrayList<>();
     //选中的都放在这里
-    Map<String, FileInfo> selectMap = new HashMap<>();
+    Map<String, FileInfo> selectMap = new LinkedHashMap<>();
 
     public FileAdapter(Context context, ArrayList<FileInfo> dataList, int resId, String chooseType, int chooseCount) {
         super(context, dataList, resId);
