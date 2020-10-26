@@ -7,8 +7,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -113,12 +111,6 @@ public class FileAdapter extends CommonAdapter<FileInfo> {
                     }
                 });
                 fileChoose.setVisibility(View.GONE);
-                rlt_item.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        EventBus.getDefault().post(data);
-                    }
-                });
             }
         } else if (chooseType.equals(FileInfo.FILE_TYPE_FILE)) {
             boolean folder = data.isFolder();

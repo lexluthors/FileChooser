@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                         fileChooser.setShowHideFile(false);
-                        fileChooser.showFile(false);
+                        fileChooser.showFile(true);
                         fileChooser.setChooseType(FileInfo.FILE_TYPE_FOLDER);
                         fileChooser.setChooseCount(9);
                         fileChooser.open();

@@ -1,11 +1,14 @@
 package com.thl.filechooser;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -135,6 +138,8 @@ public class FileChooserActivity extends AppCompatActivity {
                 } else {
                     adapter.notifyClick(data,position);
                 }
+                Log.e("草你吗>>>",data.getFilePath());
+                EventBus.getDefault().post(data);
             }
         });
 
