@@ -35,7 +35,6 @@ public class FileChooserActivity extends AppCompatActivity {
     private HashMap<Integer, Integer> firstItemPositionMap;
     private HashMap<Integer, Integer> lastItemPositionMap;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +76,7 @@ public class FileChooserActivity extends AppCompatActivity {
         tourController.setShowFile(this.showFile);
         tourController.setShowHideFile(this.showHideFile);
         ImageView back = (ImageView) findViewById(R.id.back);
+        ImageView close = (ImageView) findViewById(R.id.close);
         TextView tvTitle = (TextView) findViewById(R.id.title);
         TextView tvRightText = (TextView) findViewById(R.id.rightText);
         View bgView = (View) findViewById(R.id.bg_title);
@@ -88,6 +88,7 @@ public class FileChooserActivity extends AppCompatActivity {
         if (themeColorRes != -1) {
             bgView.setBackgroundResource(themeColorRes);
         }
+//        close.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_baseline_close_24));
 
         adapter = new FileAdapter(this, (ArrayList<FileInfo>) tourController.getCurrenFileInfoList(), R.layout.item_file, chooseType,chooseCount);
         fileRv = (RecyclerView) findViewById(R.id.fileRv);

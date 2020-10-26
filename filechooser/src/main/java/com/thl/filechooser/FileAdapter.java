@@ -3,8 +3,11 @@ package com.thl.filechooser;
 import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -33,6 +36,7 @@ public class FileAdapter extends CommonAdapter<FileInfo> {
     public void bindView(RecyclerView.ViewHolder holder, final FileInfo data, final int position) {
         TextView textView = (TextView) holder.itemView.findViewById(R.id.fileName);
         TextView textTime = (TextView) holder.itemView.findViewById(R.id.fileTime);
+        RelativeLayout rlt_item = (RelativeLayout) holder.itemView.findViewById(R.id.rlt_item);
         textView.setText(data.getFileName());
         textTime.setText(data.getCreateTime());
 
@@ -102,12 +106,19 @@ public class FileAdapter extends CommonAdapter<FileInfo> {
                     }
                 });
             } else {
+
                 fileChoose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                     }
                 });
                 fileChoose.setVisibility(View.GONE);
+                rlt_item.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EventBus.getDefault().post(data);
+                    }
+                });
             }
         } else if (chooseType.equals(FileInfo.FILE_TYPE_FILE)) {
             boolean folder = data.isFolder();
@@ -277,6 +288,8 @@ public class FileAdapter extends CommonAdapter<FileInfo> {
 //                }
 //            }
 //        }
-        super.setData(FileTourController.chooseType(chooseType,infoList));
+        super.setData(FileTourController.chooseType(chooseType, infoList));
     }
+
+
 }

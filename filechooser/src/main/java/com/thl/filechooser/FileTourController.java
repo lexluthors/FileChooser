@@ -294,9 +294,9 @@ public class FileTourController {
         List<FileInfo> list = new ArrayList<>();
         for (FileInfo fileInfo : infoList) {
             if (chooseType.equals(FileInfo.FILE_TYPE_FOLDER)) {
-                if (fileInfo.isFolder()) {
-                    list.add(fileInfo);
-                }
+                list.add(fileInfo);
+//                if (fileInfo.isFolder()) {
+//                }
             } else {
                 if (fileInfo.isFolder()) {
                     list.add(fileInfo);
