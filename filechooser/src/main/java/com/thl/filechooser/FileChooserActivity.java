@@ -50,6 +50,12 @@ public class FileChooserActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         findViewById(R.id.rightText).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
