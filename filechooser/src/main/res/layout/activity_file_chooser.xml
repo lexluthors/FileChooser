@@ -25,6 +25,7 @@
                 android:layout_marginStart="@dimen/iconMargin" />
 
             <ImageView
+                android:visibility="gone"
                 android:id="@+id/close"
                 android:layout_width="@dimen/backPressIconSize"
                 android:layout_height="@dimen/backPressIconSize"
