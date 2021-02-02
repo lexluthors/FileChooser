@@ -10,7 +10,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,14 +19,16 @@ public class FileAdapter extends CommonAdapter<FileInfo> {
     //    private int sign = -1;
     private int chooseCount = 1;
     private String chooseType;
+    private FileChooserActivity.SelectAllListener selectAllListener;
     //List<FileInfo> selectList = new ArrayList<>();
     //选中的都放在这里
-    Map<String, FileInfo> selectMap = new LinkedHashMap<>();
+    LinkedHashMap<String, FileInfo> selectMap = new LinkedHashMap<>();
 
-    public FileAdapter(Context context, ArrayList<FileInfo> dataList, int resId, String chooseType, int chooseCount) {
+    public FileAdapter(Context context, ArrayList<FileInfo> dataList, int resId, String chooseType, int chooseCount, FileChooserActivity.SelectAllListener selectAllListener) {
         super(context, dataList, resId);
         this.chooseType = chooseType;
         this.chooseCount = chooseCount;
+        this.selectAllListener = selectAllListener;
     }
 
     @Override
@@ -254,6 +255,40 @@ public class FileAdapter extends CommonAdapter<FileInfo> {
             }
             dataList.get(position).setCheck(true);
             selectMap.put(dataList.get(position).getFilePath(), dataList.get(position));
+        }
+        //取消添加一个就要重新判断是不是全选
+        selectAllListener.onSelectAll();
+        notifyDataSetChanged();
+    }
+
+    // 全选时调用
+    public void notifyAllData(boolean isSelectAll) {
+        int size = dataList.size();
+        selectMap.clear();
+        for (int i = 0; i < size; i++) {
+            if(chooseType.equals(FileInfo.FILE_TYPE_FILE)){
+                //选择文件，不选文件夹
+                if(!dataList.get(i).isFolder()){
+                    //如果是文件
+                    if(isSelectAll){
+                        dataList.get(i).setCheck(true);
+                        selectMap.put(dataList.get(i).getFilePath(), dataList.get(i));
+                    }else{
+                        dataList.get(i).setCheck(false);
+                    }
+                }
+            }else if(chooseType.equals(FileInfo.FILE_TYPE_FOLDER)){
+                //选择文件夹，不选文件
+                if(dataList.get(i).isFolder()){
+                    //如果是文件
+                    if(isSelectAll){
+                        dataList.get(i).setCheck(true);
+                        selectMap.put(dataList.get(i).getFilePath(), dataList.get(i));
+                    }else{
+                        dataList.get(i).setCheck(false);
+                    }
+                }
+            }
         }
         notifyDataSetChanged();
     }

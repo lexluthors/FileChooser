@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +28,7 @@ public class FileChooserActivity extends AppCompatActivity {
     private boolean showHideFile = true;
     public static FileChooser mFileChooser;
     private String mChoosenFilePath;
+    private String chooseType ;
 
     private FileTourController tourController;
     private FileAdapter adapter;
@@ -33,6 +36,7 @@ public class FileChooserActivity extends AppCompatActivity {
 
 
     private RecyclerView fileRv;
+    private CheckBox selectAllCheckBox;
     private int firstItemPosition = 0;
     private int lastItemPosition = 0;
     private HashMap<Integer, Integer> firstItemPositionMap;
@@ -65,6 +69,8 @@ public class FileChooserActivity extends AppCompatActivity {
             }
         });
 
+        selectAllCheckBox = findViewById(R.id.select_all);
+
         this.showFile = getIntent().getBooleanExtra("showFile", true);
         this.showHideFile = getIntent().getBooleanExtra("showHideFile", true);
         this.mChoosenFilePath = getIntent().getStringExtra("currentPath");
@@ -72,7 +78,7 @@ public class FileChooserActivity extends AppCompatActivity {
         String doneText = getIntent().getStringExtra("doneText");
         int backIconRes = getIntent().getIntExtra("backIconRes", -1);
         int chooseCount = getIntent().getIntExtra("chooseCount", 1);
-        String chooseType = getIntent().getStringExtra("chooseType");
+        chooseType = getIntent().getStringExtra("chooseType");
         int themeColorRes = getIntent().getIntExtra("themeColorRes", -1);
 
         tourController = new FileTourController(this, mChoosenFilePath,chooseType,showHideFile,showFile);
@@ -93,7 +99,12 @@ public class FileChooserActivity extends AppCompatActivity {
         }
 //        close.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_baseline_close_24));
 
-        adapter = new FileAdapter(this, (ArrayList<FileInfo>) tourController.getCurrenFileInfoList(), R.layout.item_file, chooseType,chooseCount);
+        adapter = new FileAdapter(this, (ArrayList<FileInfo>) tourController.getCurrenFileInfoList(), R.layout.item_file, chooseType, chooseCount, new SelectAllListener() {
+            @Override
+            public void onSelectAll() {
+                selectAllCheckBox.setSelected(ListUtils.INSTANCE.isSelectAll(adapter.dataList, chooseType));
+            }
+        });
         fileRv = (RecyclerView) findViewById(R.id.fileRv);
         fileRv.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         fileRv.setAdapter(adapter);
@@ -107,7 +118,6 @@ public class FileChooserActivity extends AppCompatActivity {
         lastItemPositionMap = new HashMap<>();
 
         fileRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -119,6 +129,37 @@ public class FileChooserActivity extends AppCompatActivity {
                 }
             }
         });
+
+        selectAllCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            ArrayList<FileInfo> fileInfos =    (ArrayList<FileInfo>) tourController.getCurrenFileInfoList();
+                if(chooseType.equals(FileInfo.FILE_TYPE_FILE)){
+                    //选择文件
+                    if (ListUtils.INSTANCE.getFileSize(adapter.dataList)==0){
+                        //没有可选文件，不可以全选
+                        selectAllCheckBox.setChecked(!isChecked);
+                        selectAllCheckBox.setSelected(!isChecked);
+                        return;
+                    }
+                }else if(chooseType.equals(FileInfo.FILE_TYPE_FOLDER)){
+                    //选择文件夹
+                    if (ListUtils.INSTANCE.getFolderSize(adapter.dataList)==0){
+                        //没有可选文件夹，不可以全选
+                        selectAllCheckBox.setChecked(!isChecked);
+                        selectAllCheckBox.setSelected(!isChecked);
+                        return;
+                    }
+                }
+                if(isChecked){
+                    adapter.notifyAllData(true);
+                }else{
+                    adapter.notifyAllData(false);
+                }
+                selectAllCheckBox.setSelected(isChecked);
+            }
+        });
+
         adapter.setItemClickListener(new FileAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position, FileInfo data) {
@@ -242,8 +283,22 @@ public class FileChooserActivity extends AppCompatActivity {
         }
     }
 
+    public boolean isSelectAll(){
+        ArrayList<FileInfo> fileInfos =    (ArrayList<FileInfo>) tourController.getCurrenFileInfoList();
+        int size = 0;
+        for (int i = 0; i < fileInfos.size(); i++) {
+            //，判断可选文件是不是全部选中了
+
+        }
+        return false;
+    }
     public int dp2px(float dpValue) {
         final float scale = this.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
+    }
+
+
+    public interface SelectAllListener {
+        void onSelectAll();
     }
 }
