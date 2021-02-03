@@ -205,8 +205,8 @@ public class FileChooserActivity extends AppCompatActivity {
                 listPopupWindow.setAnchorView(v);
                 ArrayList<String> sdcardList = new ArrayList<>();
                 sdcardList.add("手机存储");
-                if (FileTourController.getStoragePath(FileChooserActivity.this, true) != null)
-                    sdcardList.add("SD卡");
+//                if (FileTourController.getStoragePath(FileChooserActivity.this, true) != null)
+//                    sdcardList.add("SD卡");
 
                 SdCardAdapter sdCardAdapter = new SdCardAdapter(FileChooserActivity.this, sdcardList);
                 listPopupWindow.setAdapter(sdCardAdapter);

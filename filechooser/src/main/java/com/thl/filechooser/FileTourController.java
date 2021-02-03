@@ -1,12 +1,13 @@
 package com.thl.filechooser;
 
 import android.content.Context;
-import android.os.storage.StorageManager;
+import android.os.Environment;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
-import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -108,9 +109,12 @@ public class FileTourController {
     public void switchSdCard(int sdcardIndex) {
         if (sdcardIndex == 0) {
             rootFile = getSDcard0();
+
         } else {
             rootFile = getSDcard1();
         }
+
+
         this.currentFile = rootFile;
         currenFileInfoList = new ArrayList<>();
         currentFolderList = new ArrayList<>();
@@ -119,45 +123,47 @@ public class FileTourController {
     }
 
     public File getSDcard0() {
-        return new File(getStoragePath(mContext, false));
+//        return new File(getStoragePath(mContext, false));
+        return new File(getSDCardPath());
     }
 
     public File getSDcard1() {
-        if (getStoragePath(mContext, true) == null)
-            return new File(getStoragePath(mContext, false));
-        return new File(getStoragePath(mContext, true));
+//        if (getStoragePath(mContext, true) == null)
+//            return new File(getStoragePath(mContext, false));
+//        return new File(getStoragePath(mContext, true));
+        return new File(getSDCardPath());
     }
 
-    public static String getStoragePath(Context mContext, boolean is_removale) {
-
-        StorageManager mStorageManager = (StorageManager) mContext.getSystemService(Context.STORAGE_SERVICE);
-        Class<?> storageVolumeClazz = null;
-        try {
-            storageVolumeClazz = Class.forName("android.os.storage.StorageVolume");
-            Method getVolumeList = mStorageManager.getClass().getMethod("getVolumeList");
-            Method getPath = storageVolumeClazz.getMethod("getPath");
-            Method isRemovable = storageVolumeClazz.getMethod("isRemovable");
-            Object result = getVolumeList.invoke(mStorageManager);
-            final int length = Array.getLength(result);
-            for (int i = 0; i < length; i++) {
-                Object storageVolumeElement = Array.get(result, i);
-                String path = (String) getPath.invoke(storageVolumeElement);
-                boolean removable = (Boolean) isRemovable.invoke(storageVolumeElement);
-                if (is_removale == removable) {
-                    return path;
-                }
-            }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    public static String getStoragePath(Context mContext, boolean is_removale) {
+//
+//        StorageManager mStorageManager = (StorageManager) mContext.getSystemService(Context.STORAGE_SERVICE);
+//        Class<?> storageVolumeClazz = null;
+//        try {
+//            storageVolumeClazz = Class.forName("android.os.storage.StorageVolume");
+//            Method getVolumeList = mStorageManager.getClass().getMethod("getVolumeList");
+//            Method getPath = storageVolumeClazz.getMethod("getPath");
+//            Method isRemovable = storageVolumeClazz.getMethod("isRemovable");
+//            Object result = getVolumeList.invoke(mStorageManager);
+//            final int length = Array.getLength(result);
+//            for (int i = 0; i < length; i++) {
+//                Object storageVolumeElement = Array.get(result, i);
+//                String path = (String) getPath.invoke(storageVolumeElement);
+//                boolean removable = (Boolean) isRemovable.invoke(storageVolumeElement);
+//                if (is_removale == removable) {
+//                    return path;
+//                }
+//            }
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (InvocationTargetException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchMethodException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
     public boolean isRootFile() {
         if (isRootFile(currentFile))
@@ -415,4 +421,44 @@ public class FileTourController {
         return path.substring(start);
     }
 
+
+    /**
+     * Get SD card path by CMD.
+     */
+    public static String getSDCardPath() {
+        String cmd = "cat /proc/mounts";
+        String sdcard = null;
+        Runtime run = Runtime.getRuntime();// 返回与当前 Java 应用程序相关的运行时对象
+        BufferedReader bufferedReader = null;
+        try {
+            Process p = run.exec(cmd);// 启动另一个进程来执行命令
+            bufferedReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(p.getInputStream())));
+            String lineStr;
+            while ((lineStr = bufferedReader.readLine()) != null) {
+                if (lineStr.contains("sdcard")
+                        && lineStr.contains(".android_secure")) {
+                    String[] strArray = lineStr.split(" ");
+                    if (strArray.length >= 5) {
+                        sdcard = strArray[1].replace("/.android_secure", "");
+                        return sdcard;
+                    }
+                }
+                if (p.waitFor() != 0 && p.exitValue() == 1) {
+                    // p.exitValue()==0表示正常结束，1：非正常结束
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (bufferedReader != null) {
+                    bufferedReader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        sdcard = Environment.getExternalStorageDirectory().getPath();
+        return sdcard;
+    }
 }
