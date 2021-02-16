@@ -3,11 +3,7 @@ package com.thl.filechooser;
 import android.content.Context;
 import android.os.Environment;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -426,38 +422,38 @@ public class FileTourController {
      * Get SD card path by CMD.
      */
     public static String getSDCardPath() {
-        String cmd = "cat /proc/mounts";
+//        String cmd = "cat /proc/mounts";
         String sdcard = null;
-        Runtime run = Runtime.getRuntime();// 返回与当前 Java 应用程序相关的运行时对象
-        BufferedReader bufferedReader = null;
-        try {
-            Process p = run.exec(cmd);// 启动另一个进程来执行命令
-            bufferedReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(p.getInputStream())));
-            String lineStr;
-            while ((lineStr = bufferedReader.readLine()) != null) {
-                if (lineStr.contains("sdcard")
-                        && lineStr.contains(".android_secure")) {
-                    String[] strArray = lineStr.split(" ");
-                    if (strArray.length >= 5) {
-                        sdcard = strArray[1].replace("/.android_secure", "");
-                        return sdcard;
-                    }
-                }
-                if (p.waitFor() != 0 && p.exitValue() == 1) {
-                    // p.exitValue()==0表示正常结束，1：非正常结束
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (bufferedReader != null) {
-                    bufferedReader.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+//        Runtime run = Runtime.getRuntime();// 返回与当前 Java 应用程序相关的运行时对象
+//        BufferedReader bufferedReader = null;
+//        try {
+//            Process p = run.exec(cmd);// 启动另一个进程来执行命令
+//            bufferedReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(p.getInputStream())));
+//            String lineStr;
+//            while ((lineStr = bufferedReader.readLine()) != null) {
+//                if (lineStr.contains("sdcard")
+//                        && lineStr.contains(".android_secure")) {
+//                    String[] strArray = lineStr.split(" ");
+//                    if (strArray.length >= 5) {
+//                        sdcard = strArray[1].replace("/.android_secure", "");
+//                        return sdcard;
+//                    }
+//                }
+//                if (p.waitFor() != 0 && p.exitValue() == 1) {
+//                    // p.exitValue()==0表示正常结束，1：非正常结束
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                if (bufferedReader != null) {
+//                    bufferedReader.close();
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
         sdcard = Environment.getExternalStorageDirectory().getPath();
         return sdcard;
     }

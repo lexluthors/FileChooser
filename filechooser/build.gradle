@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.novoda.bintray-release'
 
 
 android {
@@ -27,15 +26,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
-publish {
-    repoName = 'maven'  // 此字段为你的仓库名称，默认为"maven"，上传的时候记得检查，否则上传会报错
-    userOrg = 'lexluthors'  // bintray用户名
-    groupId = 'com.apecoder'  // 模块目录
-    artifactId = 'filechooser'  // 此字段为你的模块名称，唯一标识符
-    publishVersion = '0.0.9'  // 版本号
-    desc = 'FileChooser androidX version'
-    website = 'https://github.com/supertaohaili/FileChooser'
-}
 repositories {
     mavenCentral()
 }
