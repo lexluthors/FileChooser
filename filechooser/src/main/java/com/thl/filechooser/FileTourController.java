@@ -2,8 +2,12 @@ package com.thl.filechooser;
 
 import android.content.Context;
 import android.os.Environment;
+import android.os.storage.StorageManager;
 
 import java.io.File;
+import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,18 +28,21 @@ public class FileTourController {
     private boolean isRootFile = true;
     private boolean showFile = true;
     private boolean showHideFile = false;
+    //是否显示外置sd卡
+    private boolean showExternalSdCard = false;
     private String chooseType;
     private int sdcardIndex;
 
 
     private Context mContext;
 
-    public FileTourController(Context context, String currentPath, String chooseType, boolean showHideFile, boolean showFile) {
+    public FileTourController(Context context, String currentPath, String chooseType, boolean showHideFile, boolean showFile, boolean showExternalSdCard) {
         this.showHideFile = showHideFile;
         this.chooseType = chooseType;
         this.showFile = showFile;
         this.currentFile = new File(currentPath);
         this.mContext = context;
+        this.showExternalSdCard = showExternalSdCard;
         rootFile = getRootFile();
         System.out.println("FileTourController.getRootFile " + rootFile.getAbsolutePath());
         if (currentFile == null) {
@@ -119,47 +126,53 @@ public class FileTourController {
     }
 
     public File getSDcard0() {
-//        return new File(getStoragePath(mContext, false));
-        return new File(getSDCardPath());
+        if (showExternalSdCard) {
+            return new File(getStoragePath(mContext, false));
+        } else {
+            return new File(getSDCardPath());
+        }
     }
 
     public File getSDcard1() {
-//        if (getStoragePath(mContext, true) == null)
-//            return new File(getStoragePath(mContext, false));
-//        return new File(getStoragePath(mContext, true));
-        return new File(getSDCardPath());
+        if (showExternalSdCard) {
+            if (getStoragePath(mContext, true) == null)
+                return new File(getStoragePath(mContext, false));
+            return new File(getStoragePath(mContext, true));
+        } else {
+            return new File(getSDCardPath());
+        }
     }
 
-//    public static String getStoragePath(Context mContext, boolean is_removale) {
-//
-//        StorageManager mStorageManager = (StorageManager) mContext.getSystemService(Context.STORAGE_SERVICE);
-//        Class<?> storageVolumeClazz = null;
-//        try {
-//            storageVolumeClazz = Class.forName("android.os.storage.StorageVolume");
-//            Method getVolumeList = mStorageManager.getClass().getMethod("getVolumeList");
-//            Method getPath = storageVolumeClazz.getMethod("getPath");
-//            Method isRemovable = storageVolumeClazz.getMethod("isRemovable");
-//            Object result = getVolumeList.invoke(mStorageManager);
-//            final int length = Array.getLength(result);
-//            for (int i = 0; i < length; i++) {
-//                Object storageVolumeElement = Array.get(result, i);
-//                String path = (String) getPath.invoke(storageVolumeElement);
-//                boolean removable = (Boolean) isRemovable.invoke(storageVolumeElement);
-//                if (is_removale == removable) {
-//                    return path;
-//                }
-//            }
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (InvocationTargetException e) {
-//            e.printStackTrace();
-//        } catch (NoSuchMethodException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+    public static String getStoragePath(Context mContext, boolean is_removale) {
+
+        StorageManager mStorageManager = (StorageManager) mContext.getSystemService(Context.STORAGE_SERVICE);
+        Class<?> storageVolumeClazz = null;
+        try {
+            storageVolumeClazz = Class.forName("android.os.storage.StorageVolume");
+            Method getVolumeList = mStorageManager.getClass().getMethod("getVolumeList");
+            Method getPath = storageVolumeClazz.getMethod("getPath");
+            Method isRemovable = storageVolumeClazz.getMethod("isRemovable");
+            Object result = getVolumeList.invoke(mStorageManager);
+            final int length = Array.getLength(result);
+            for (int i = 0; i < length; i++) {
+                Object storageVolumeElement = Array.get(result, i);
+                String path = (String) getPath.invoke(storageVolumeElement);
+                boolean removable = (Boolean) isRemovable.invoke(storageVolumeElement);
+                if (is_removale == removable) {
+                    return path;
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public boolean isRootFile() {
         if (isRootFile(currentFile))
@@ -310,8 +323,7 @@ public class FileTourController {
                         if (FileInfo.FILE_TYPE_ZIP.equals(fileInfo.getFileType()) || FileInfo.FILE_TYPE_RAR.equals(fileInfo.getFileType())) {
                             list.add(fileInfo);
                         }
-                    }
-                    else if (FileInfo.FILE_TYPE_IMAGE.equals(chooseType)) {
+                    } else if (FileInfo.FILE_TYPE_IMAGE.equals(chooseType)) {
                         //把图片加进去
                         if (FileInfo.FILE_TYPE_JPEG.equals(fileInfo.getFileType())
                                 || FileInfo.FILE_TYPE_JPG.equals(fileInfo.getFileType())
@@ -320,8 +332,7 @@ public class FileTourController {
                                 || FileInfo.FILE_TYPE_PNG.equals(fileInfo.getFileType())) {
                             list.add(fileInfo);
                         }
-                    }
-                    else if (chooseType.equals(fileInfo.getFileType())) {
+                    } else if (chooseType.equals(fileInfo.getFileType())) {
                         list.add(fileInfo);
                     }
                 }

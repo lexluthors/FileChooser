@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
                         fileChooser.showFile(true);
                         fileChooser.setChooseType(FileInfo.FILE_TYPE_FOLDER);
                         fileChooser.setChooseCount(199999);
+                        fileChooser.showExternalSdCard(true);
                         fileChooser.open();
                     }
 

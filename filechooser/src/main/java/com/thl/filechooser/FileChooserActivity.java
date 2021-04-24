@@ -26,6 +26,7 @@ public class FileChooserActivity extends AppCompatActivity {
 
     private boolean showFile = true;
     private boolean showHideFile = true;
+    private boolean showExternalSdCard = false;
     public static FileChooser mFileChooser;
     private String mChoosenFilePath;
     private String chooseType ;
@@ -73,6 +74,7 @@ public class FileChooserActivity extends AppCompatActivity {
 
         this.showFile = getIntent().getBooleanExtra("showFile", true);
         this.showHideFile = getIntent().getBooleanExtra("showHideFile", true);
+        this.showExternalSdCard = getIntent().getBooleanExtra("showExternalSdCard", false);
         this.mChoosenFilePath = getIntent().getStringExtra("currentPath");
         String title = getIntent().getStringExtra("title");
         String doneText = getIntent().getStringExtra("doneText");
@@ -81,7 +83,7 @@ public class FileChooserActivity extends AppCompatActivity {
         chooseType = getIntent().getStringExtra("chooseType");
         int themeColorRes = getIntent().getIntExtra("themeColorRes", -1);
 
-        tourController = new FileTourController(this, mChoosenFilePath,chooseType,showHideFile,showFile);
+        tourController = new FileTourController(this, mChoosenFilePath,chooseType,showHideFile,showFile,showExternalSdCard);
         tourController.setShowFile(this.showFile);
         tourController.setShowHideFile(this.showHideFile);
         ImageView back = (ImageView) findViewById(R.id.back);

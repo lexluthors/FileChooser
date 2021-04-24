@@ -22,6 +22,8 @@ public class FileChooser {
     private int backIconRes = -1;
     private boolean showFile = true;
     private boolean showHideFile = false;
+    //是否显示外置sd卡
+    private boolean showExternalSdCard = false;
 
     public boolean isShowHideFile() {
         return showHideFile;
@@ -56,6 +58,10 @@ public class FileChooser {
 
     public FileChooser showFile(boolean showFile) {
         this.showFile = showFile;
+        return this;
+    }
+    public FileChooser showExternalSdCard(boolean showExternalSdCard) {
+        this.showExternalSdCard = showExternalSdCard;
         return this;
     }
 
@@ -94,6 +100,7 @@ public class FileChooser {
         Intent intent = new Intent(mContext, FileChooserActivity.class);
         intent.putExtra("themeColorRes", this.themeColorRes);
         intent.putExtra("showHideFile", this.showHideFile);
+        intent.putExtra("showExternalSdCard", this.showExternalSdCard);
         intent.putExtra("currentPath", this.mChoosenFilePath);
         intent.putExtra("title", this.title);
         intent.putExtra("doneText", this.doneText);
